@@ -127,6 +127,8 @@ class LaneRecognition(object):
         lowerAngle = math.radians(centralAngle-angleGap)
         upperAngle = math.radians(centralAngle+angleGap) 
         filteredLines = []
+        if lines is None:
+            return filteredLines
         for line in lines:
             for x1, y1, x2, y2 in line:
                 slope = (y2-y1)/(x2-x1)
@@ -216,6 +218,11 @@ class LaneRecognition(object):
         rightLaneLineX = []
         rightLaneLineY = []
         xCenter = (int )(xImageRightBorder/2)
+        leftLanePoints = np.column_stack(( [], [] )).reshape(-1,1,2)
+        rightLanePoints = np.column_stack(( [], [] )).reshape(-1,1,2)
+        if(lines is None):
+            return leftLanePoints, rightLanePoints
+
         for line in lines:
             for x1, y1, x2, y2 in line:
                 if( x1 < xCenter and x2 < xCenter):
@@ -333,6 +340,7 @@ class VideoLaneFinder(object):
             count =0
             if 'solidYellowLeft.mp4' in path or 'solidWhiteRight.mp4' in path:
                 linear = True
+                continue
             while(cap.isOpened()):
                 ret, frame = cap.read()
                 count +=1
@@ -357,8 +365,8 @@ DefaultImagePath = './../test_images/'
 '''
 This shows all images
 '''
-AllImages = ImageLaneFinder(DefaultImagePath)
-AllImages.LaneImages()
+#AllImages = ImageLaneFinder(DefaultImagePath)
+#AllImages.LaneImages()
 
 
 '''
